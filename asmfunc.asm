@@ -17,10 +17,10 @@ imgCvtGrayIntToDouble:
     ; r8  = width
     ; r9  = height
     
-    xor r10, r10 ; h ctr
+    xor r10, r10 ; ctr
     movsd xmm1, [denom] ; 255.0
     mov r11, r8
-    imul r11, r9
+    imul r11, r9 ; total pixels
     
     ; REMEMBER! input and output are internally
     ; 1d arrays, so ez looping
