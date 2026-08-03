@@ -53,3 +53,34 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+
+# === Visual Studio Build Artifacts ===
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+
+# === Visual Studio Cache and Hidden Folders ===
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# === NASM and C Compiler Outputs ===
+*.obj
+*.o
+*.exe
+*.out
+*.pdb
+*.ilk
+*.lst
+*.bak
+
+# === Operating System Junk ===
+.DS_Store
+Thumbs.db
+
