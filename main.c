@@ -5,14 +5,36 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <stdint.h>
+#include <math.h>
+
+// Function to check if the output matches the expected values
+int outputCorrect(const uint8_t* input, const double* output, int totalPixels) {
+	for (int i = 0; i < totalPixels; i++) {
+		double e = input[i] / 255.0; // expected value
+		double diff = fabs(e - output[i]);
+
+		if (diff > 1e-9) {
+			printf("Mismatch at index %d: expected %f, got %f\n", i, e, output[i]);
+			return 0; // mismatch found
+		}
+	}
+	return 1; // all values match
+}
+
+
+void benchmark(int w, int h) {
+	// TODO: Implement benchmarking logic here
+}
+
 
 // Template C to x86 call
 extern void imgCvtGrayIntToDouble( 
-	const uint8_t* input, // unsigned 8-bit integer
-	double* output,       // double precision float
+	const uint8_t* input, // 1d uint8 array
+	double* output,       // 1d float64 array
 	int w,				  // width of the image
 	int h				  // height of the image
 );
+
 
 int main(int argc, char* argv[]) {
 
@@ -52,6 +74,14 @@ int main(int argc, char* argv[]) {
 
 	// call asm func to convert int to double
 	imgCvtGrayIntToDouble(input, output, w, h);
+
+	// OPTIONAL double check output against expected values
+	if (outputCorrect(input, output, totalPixels)) {
+		printf("CHECK: Output matches expected values.\n");
+	}
+	else {
+		printf("CHECK: Output does NOT match expected values.\n");
+	}
 	
 	// print output pixels in matrix form
 	printf("\nOutput: \n");
