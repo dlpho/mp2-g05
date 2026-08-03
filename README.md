@@ -11,4 +11,4 @@ PANGAN, Aaliyah Maxine Rochelle
    ```
    git clone https://github.com/dlpho/mp2-g05
    ```
-2. Navigate to the project directory and open mp2.
+2. Navigate to the project directory and click `mp2-g05.slnx` to open the MVS project
