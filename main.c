@@ -41,6 +41,7 @@ int main(int argc, char* argv[]) {
 		scanf("%hhu", &input[i]);
 
 		// validate value is in range [0, 255]
+		// hhu and uint8_t are already [0, 255], but checking for safety
 		if (input[i] < 0 || input[i] > 255) {
 			printf("Pixel values must be in the range [0, 255].\n");
 			free(input);
