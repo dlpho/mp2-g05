@@ -4,14 +4,11 @@
 
 section .data
 denom dq 255.0
-msg db "Calling asm!",13,10,0
-
 
 section .text
 bits 64
 default rel ; to handle address relocation
 global imgCvtGrayIntToDouble
-extern printf
 
 imgCvtGrayIntToDouble:
     
@@ -34,11 +31,5 @@ imgCvtGrayIntToDouble:
     
     ; move quotient to output
     movsd [rdx], xmm0
-    
-    ; handle caller
-    sub rsp, 8*5 
-    lea rcx, [msg]
-    call printf
-    add rsp, 8*5
-  
+   
     ret
