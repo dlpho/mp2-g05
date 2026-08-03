@@ -12,24 +12,35 @@ global imgCvtGrayIntToDouble
 
 imgCvtGrayIntToDouble:
     
-    ; rcx = input
-    ; rdx = output
+    ; rcx = input[0] ptr
+    ; rdx = output[0] ptr
     ; r8  = width
     ; r9  = height
     
-    ; move input to eax, zero extended
-    movzx eax, byte [rcx]
+    xor r10, r10 ; h ctr
+    movsd xmm1, [denom] ; 255.0
+    mov r11, r8
+    imul r11, r9
     
-    ; convert to double prec float
-    cvtsi2sd xmm0, eax
-    
-    ; get 255.0 from memory
-    movsd xmm1, [denom]
-    
-    ; divide input / 255.0
-    divsd xmm0, xmm1
-    
-    ; move quotient to output
-    movsd [rdx], xmm0
+    ; REMEMBER! input and output are internally
+    ; 1d arrays, so ez looping
+
+    looper:
+        ; load pixel value, zero extend to 64 bits
+        movzx rax, byte [rcx + r10]
+
+        ; convert to double
+        cvtsi2sd xmm0, rax
+
+        ; pixel / 255.0
+        divsd xmm0, xmm1
+
+        ; move result to output (now 64-bits)
+        movsd [rdx + r10 * 8], xmm0
+
+        inc r10
+        cmp r10, r11
+        jl looper
+
    
     ret
