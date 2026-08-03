@@ -1,4 +1,5 @@
 // LBYARCH S25H - G05 (Ho, Pangan)
+
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
@@ -34,7 +35,7 @@ int main(int argc, char* argv[]) {
 	input = malloc(totalPixels * sizeof(uint8_t));
 	output = malloc(totalPixels * sizeof(double));
 
-	// read input pixels
+	// read input pixels and validate
 	printf("Enter %d pixels: ", totalPixels);
 	for (int i = 0; i < totalPixels; i++) {
 		scanf("%hhu", &input[i]);
@@ -48,7 +49,7 @@ int main(int argc, char* argv[]) {
 		}
 	}
 
-	// call asm to convert to double
+	// call asm func to convert int to double
 	imgCvtGrayIntToDouble(input, output, w, h);
 	
 	// print output pixels in matrix form

@@ -42,5 +42,4 @@ imgCvtGrayIntToDouble:
         cmp r10, r11
         jl looper
 
-   
     ret
