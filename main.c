@@ -6,9 +6,24 @@
 #include <windows.h>
 #include <stdint.h>
 #include <math.h>
+#include <time.h>
 
-// Function to check if the output matches the expected values
-int outputCorrect(const uint8_t* input, const double* output, int totalPixels) {
+
+// Template C to x86 call
+extern void imgCvtGrayIntToDouble(
+	const uint8_t* input, // 1d uint8 array
+	double* output,       // 1d float64 array
+	int w,				  // width of the image
+	int h				  // height of the image
+);
+
+
+/*
+	Function that computes the expected value per pixel in the w * h pixel array.
+	Returns 1 if all values match expected values, else 0 if at least one pixel 
+	has an error exceeding 1e-9.
+*/
+int checkOutput(const uint8_t* input, const double* output, int totalPixels) {
 	for (int i = 0; i < totalPixels; i++) {
 		double e = input[i] / 255.0; // expected value
 		double diff = fabs(e - output[i]);
@@ -21,23 +36,12 @@ int outputCorrect(const uint8_t* input, const double* output, int totalPixels) {
 	return 1; // all values match
 }
 
-
-void benchmark(int w, int h) {
-	// TODO: Implement benchmarking logic here
-}
-
-
-// Template C to x86 call
-extern void imgCvtGrayIntToDouble( 
-	const uint8_t* input, // 1d uint8 array
-	double* output,       // 1d float64 array
-	int w,				  // width of the image
-	int h				  // height of the image
-);
-
-
-int main(int argc, char* argv[]) {
-
+/*
+	Function that holds the main conversion program. Asks user to input width and height, 
+	then w * h pixel values [0, 255]. Outputs the resulting pixel array. Returns 0 if no errors,
+	else 1 for input errors.
+*/
+int convert() {
 	uint8_t* input;
 	double* output;
 	int totalPixels, h, w;
@@ -68,21 +72,21 @@ int main(int argc, char* argv[]) {
 			printf("Pixel values must be in the range [0, 255].\n");
 			free(input);
 			free(output);
-			return -1;
+			return 1;
 		}
 	}
 
 	// call asm func to convert int to double
 	imgCvtGrayIntToDouble(input, output, w, h);
 
-	// OPTIONAL double check output against expected values
-	if (outputCorrect(input, output, totalPixels)) {
+	// double check output against expected values
+	if (checkOutput(input, output, totalPixels)) {
 		printf("CHECK: Output matches expected values.\n");
 	}
 	else {
 		printf("CHECK: Output does NOT match expected values.\n");
 	}
-	
+
 	// print output pixels in matrix form
 	printf("\nOutput: \n");
 	for (int i = 0; i < h; i++) {
@@ -95,6 +99,99 @@ int main(int argc, char* argv[]) {
 	// free memory
 	free(input);
 	free(output);
-	
+
 	return 0;
+}
+
+/*
+	Function that creates a w * h pixel array with a generated value [0, 255] and converts
+	the array into double using imgCvtGrayIntToDouble(). 
+	Returns execution time of the conversion function in processing the w * h pixel array.
+*/
+double timeConversion(int w, int h) {
+	clock_t start, end;
+	double elapsed;
+	
+	int totalPixels = w * h;
+	int r = rand() % 256;
+
+	uint8_t* input = malloc(totalPixels * sizeof(uint8_t));
+	double* output = malloc(totalPixels * sizeof(double));
+	
+	// fill entire array with the random value
+	for (int i = 0; i < totalPixels; i++) {
+		input[i] = (uint8_t)r;
+	}
+
+	// sanity check input
+	printf("Input: %hhu\n", input[totalPixels - 1]);
+
+	// time the conversion
+	start = clock();
+	imgCvtGrayIntToDouble(input, output, w, h);
+	end = clock();
+
+	// calculate elapsed time
+	elapsed = (double)(end - start) / CLOCKS_PER_SEC;
+
+	// sanity check output
+	printf("\nOutput: %.2f \n", output[totalPixels - 1]);
+
+	// print elapsed time
+	printf("Elapsed time: %f seconds\n", elapsed);
+
+	// free memory
+	free(input);
+	free(output);
+
+	return elapsed;
+}
+
+/*
+	Function that benchmarks the conversion function over a number of iterations and returns
+	the average elapsed time.
+*/
+double benchmark(int w, int h, int iterations) {
+	double totalTime = 0.0;
+	for (int i = 0; i < iterations; i++) {
+		totalTime += timeConversion(w, h);
+	}
+	double averageTime = totalTime / iterations;
+	printf("Average elapsed time over %d iterations: %f seconds\n", iterations, averageTime);
+	return averageTime;
+}
+
+/*
+	Function that runs the benchmark suite for the three required cases:
+	10x10, 100x100, and 1000x1000. Prints the average elapsed time for each case.
+ */
+void benchmarkSuite(int iterations) {
+	double case10 = benchmark(10, 10, iterations);
+	double case100 = benchmark(100, 100, iterations);
+	double case1000 = benchmark(1000, 1000, iterations);
+
+	// print summary
+	printf("\nBenchmark Summary:\n");
+	printf("Case 10x10: Average elapsed time over %d iterations: %f seconds\n", iterations, case10);
+	printf("Case 100x100: Average elapsed time over %d iterations: %f seconds\n", iterations, case100);
+	printf("Case 1000x1000: Average elapsed time over %d iterations: %f seconds\n", iterations, case1000);
+}
+
+int main(int argc, char* argv[]) {
+
+	// init random seed w time ONCE
+	srand(time(NULL));
+
+	// time a single instance of conversion
+	//timeConversion(1000, 1000);
+
+	// time the avg of multiple conversions of same dimensions
+	//benchmark(10, 10, 30);
+
+	// time the avg for each of three cases
+	benchmarkSuite(30);
+
+	// conversion via user input
+	return convert();
+	//return 0;
 }
