@@ -23,7 +23,7 @@ extern void imgCvtGrayIntToDouble(
 	Returns 1 if all values match expected values, else 0 if at least one pixel 
 	has an error exceeding 1e-9.
 */
-int checkOutput(const uint8_t* input, const double* output, int totalPixels) {
+int checker(const uint8_t* input, const double* output, int totalPixels) {
 	for (int i = 0; i < totalPixels; i++) {
 		double e = input[i] / 255.0; // expected value
 		double diff = fabs(e - output[i]);
@@ -79,13 +79,14 @@ int convert() {
 	// call asm func to convert int to double
 	imgCvtGrayIntToDouble(input, output, w, h);
 
+	// UNCOMMENT to print
 	// double check output against expected values
-	if (checkOutput(input, output, totalPixels)) {
-		printf("CHECK: Output matches expected values.\n");
-	}
-	else {
-		printf("CHECK: Output does NOT match expected values.\n");
-	}
+	// if (checker(input, output, totalPixels)) {
+	// 	printf("CHECK: Output matches expected values.\n");
+	// }
+	// else {
+	// 	printf("CHECK: Output does NOT match expected values.\n");
+	// }
 
 	// print output pixels in matrix form
 	printf("\nOutput: \n");
@@ -137,9 +138,20 @@ double timeConversion(int w, int h) {
 	// calculate elapsed time in miliseconds (change to 1000000.0 for microseconds)
 	elapsed = ((double)(end.QuadPart - start.QuadPart) / frequency.QuadPart) * 1000.0;
 
+	// UNCOMMENT to print
+	// double check output against expected values
+	//if (checker(input, output, totalPixels)) {
+	//	printf("CHECK: Output matches expected values.\n");
+	//}
+	//else {
+	//	printf("CHECK: Output does NOT match expected values.\n");
+	//}
+
+	// UNCOMMENT to print
 	// sanity check output
 	//printf("\nOutput: %.2f \n", output[totalPixels - 1]);
 
+	// UNCOMMENT to print
 	// print elapsed time
 	//printf("Elapsed time: %f ms\n", elapsed);
 
@@ -163,6 +175,7 @@ double benchmark(int w, int h, int iterations) {
 	}
 	avgTime = totalTime / iterations;
 	
+	// UNCOMMENT to print
 	//printf("%dx%d: Average execution time over %d iterations: %.4f microseconds\n",w, h, iterations, avgTime);
 	return avgTime;
 }
@@ -177,7 +190,7 @@ void benchmarkSuite(int iterations) {
 	double case1000 = benchmark(1000, 1000, iterations);
 
 	// print summary
-	printf("\Average Time Summary (%d Iterations):\n", iterations);
+	printf("\nAvg. Time Summary (%d Iterations):\n", iterations);
     printf("10x10:     %.4f ms\n", case10);
     printf("100x100:   %.4f ms\n", case100);
     printf("1000x1000: %.4f ms\n", case1000);
@@ -195,9 +208,9 @@ int main(int argc, char* argv[]) {
 	//benchmark(10, 10, 30);
 
 	// time the avg for each of three cases
-	//benchmarkSuite(30);
+	benchmarkSuite(30);
 
 	// conversion via user input
-	return convert();
-	//return 0;
+	//return convert();
+	return 0;
 }

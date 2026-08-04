@@ -141,7 +141,6 @@
     </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="benchmark.c" />
     <ClCompile Include="main.c" />
   </ItemGroup>
   <ItemGroup>
