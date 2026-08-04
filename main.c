@@ -208,9 +208,9 @@ int main(int argc, char* argv[]) {
 	//benchmark(10, 10, 30);
 
 	// time the avg for each of three cases
-	benchmarkSuite(30);
+	//benchmarkSuite(30);
 
 	// conversion via user input
-	//return convert();
-	return 0;
+	return convert();
+	//return 0;
 }
