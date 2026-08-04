@@ -109,7 +109,9 @@ int convert() {
 	Returns execution time of the conversion function in processing the w * h pixel array.
 */
 double timeConversion(int w, int h) {
-	clock_t start, end;
+	LARGE_INTEGER frequency;
+	LARGE_INTEGER start;
+	LARGE_INTEGER end;
 	double elapsed;
 	
 	int totalPixels = w * h;
@@ -124,21 +126,22 @@ double timeConversion(int w, int h) {
 	}
 
 	// sanity check input
-	printf("Input: %hhu\n", input[totalPixels - 1]);
+	//printf("Input: %hhu\n", input[totalPixels - 1]);
 
 	// time the conversion
-	start = clock();
+	QueryPerformanceFrequency(&frequency);
+	QueryPerformanceCounter(&start);
 	imgCvtGrayIntToDouble(input, output, w, h);
-	end = clock();
+	QueryPerformanceCounter(&end);
 
-	// calculate elapsed time
-	elapsed = (double)(end - start) / CLOCKS_PER_SEC;
+	// calculate elapsed time in miliseconds (change to 1000000.0 for microseconds)
+	elapsed = ((double)(end.QuadPart - start.QuadPart) / frequency.QuadPart) * 1000.0;
 
 	// sanity check output
-	printf("\nOutput: %.2f \n", output[totalPixels - 1]);
+	//printf("\nOutput: %.2f \n", output[totalPixels - 1]);
 
 	// print elapsed time
-	printf("Elapsed time: %f seconds\n", elapsed);
+	//printf("Elapsed time: %f ms\n", elapsed);
 
 	// free memory
 	free(input);
@@ -152,13 +155,16 @@ double timeConversion(int w, int h) {
 	the average elapsed time.
 */
 double benchmark(int w, int h, int iterations) {
-	double totalTime = 0.0;
+	double avgTime, totalTime = 0.0;
+
+	// run conversion and accumulate time
 	for (int i = 0; i < iterations; i++) {
 		totalTime += timeConversion(w, h);
 	}
-	double averageTime = totalTime / iterations;
-	printf("Average elapsed time over %d iterations: %f seconds\n", iterations, averageTime);
-	return averageTime;
+	avgTime = totalTime / iterations;
+	
+	//printf("%dx%d: Average execution time over %d iterations: %.4f microseconds\n",w, h, iterations, avgTime);
+	return avgTime;
 }
 
 /*
@@ -171,10 +177,10 @@ void benchmarkSuite(int iterations) {
 	double case1000 = benchmark(1000, 1000, iterations);
 
 	// print summary
-	printf("\nBenchmark Summary:\n");
-	printf("Case 10x10: Average elapsed time over %d iterations: %f seconds\n", iterations, case10);
-	printf("Case 100x100: Average elapsed time over %d iterations: %f seconds\n", iterations, case100);
-	printf("Case 1000x1000: Average elapsed time over %d iterations: %f seconds\n", iterations, case1000);
+	printf("\Average Time Summary (%d Iterations):\n", iterations);
+    printf("10x10:     %.4f ms\n", case10);
+    printf("100x100:   %.4f ms\n", case100);
+    printf("1000x1000: %.4f ms\n", case1000);
 }
 
 int main(int argc, char* argv[]) {
@@ -189,7 +195,7 @@ int main(int argc, char* argv[]) {
 	//benchmark(10, 10, 30);
 
 	// time the avg for each of three cases
-	benchmarkSuite(30);
+	//benchmarkSuite(30);
 
 	// conversion via user input
 	return convert();
