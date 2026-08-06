@@ -8,7 +8,7 @@
 - PANGAN, Aaliyah Maxine Rochelle
 
 **Video Demo**
-[![Video demo TODO](https://img.youtube.com/vi/0g8k1J3j5x4/0.jpg)](https://www.youtube.com/watch?v=0g8k1J3j5x4)
+![Video demo](https://drive.google.com/file/d/1Q6xun2aYbb8vReTx_Jl_n2Px4hyNGB3_/view?usp=sharing)
 
 ## Project Overview
 
@@ -105,4 +105,23 @@ sizes and pixel values, with consistent execution times across the different tes
 
 ## Execution and Performance Analysis
 
-[TODO]
+### Correctness Check
+
+The screenshot below shows a sample run of the program with the `checker()` correctness validation enabled, confirming the assembly output `(imgCvtGrayIntToDouble)` matches the expected `pixel / 255.0` value for every pixel:
+
+![Program Screenshot](./Program-Output-Screenshot.png)
+
+### Benchmark Results
+
+`benchmarkSuite(30)` was used to measure the average execution time of `imgCvtGrayIntToDouble` over 30 iterations for each of the three required image sizes. Only the assembly function call itself was timed using `QueryPerformanceCounter`. Memory allocation, input generation, and correctness checking were performed outside the timed section.
+
+| Image Size  | Total Pixels | Avg. Execution Time (ms) |
+|-------------|--------------|--------------------------|
+| 10 x 10     | 100          | 0.0005                   |
+| 100 x 100   | 10,000       | 0.0479                   |
+| 1000 x 1000 | 1,000,000    | 4.7186                   |
+
+### Short Analysis
+- **Correctness:** All 90 outputs (30 iterations × 3 test cases) were verified against the expected `pixel / 255.0` values using `checker()`. No mismatches greater than 1e-9 were found. This confirms that `imgCvtGrayIntToDouble` produces the same results as the equivalent C computation.
+- **Scaling behavior:** The assembly function processes one pixel at a time using a simple loop. For each pixel, it performs one integer to double conversion `(cvtsi2sd)`, one floating point division `(divsd)`, and one store operation `(movsd)`. Since each pixel requires the same amount of work, the execution time increases approximately in proportion to the number of pixels processed. The measured execution times closely follow the increase in image size, confirming the expected O(n) time complexity (running time change as input size change)
+- **Efficiency:** The implementation uses `SSE2` scalar floating point instructions with `XMM` registers instead of the legacy x87 floating point stack. This keeps the computation simple and efficient while performing a fixed number of operations for each pixel. As the image size increases, the assembly function must read, convert, divide, and store more pixels. Since these operations are repeated once for every pixel, they make up most of the execution time. This is why the execution time increases approximately in proportion to the number of pixels processed. 

@@ -79,14 +79,15 @@ int convert() {
 	// call asm func to convert int to double
 	imgCvtGrayIntToDouble(input, output, w, h);
 
-	// UNCOMMENT to print
+	// UNCOMMENT to print - start
 	// double check output against expected values
-	// if (checker(input, output, totalPixels)) {
-	// 	printf("CHECK: Output matches expected values.\n");
-	// }
-	// else {
-	// 	printf("CHECK: Output does NOT match expected values.\n");
-	// }
+	 if (checker(input, output, totalPixels)) {
+	 	printf("CHECK: Output matches expected values.\n");
+	 }
+	 else {
+	 	printf("CHECK: Output does NOT match expected values.\n");
+	 }
+	// end
 
 	// print output pixels in matrix form
 	printf("\nOutput: \n");
@@ -138,14 +139,15 @@ double timeConversion(int w, int h) {
 	// calculate elapsed time in miliseconds (change to 1000000.0 for microseconds)
 	elapsed = ((double)(end.QuadPart - start.QuadPart) / frequency.QuadPart) * 1000.0;
 
-	// UNCOMMENT to print
+	// UNCOMMENT to print - start
 	// double check output against expected values
-	//if (checker(input, output, totalPixels)) {
-	//	printf("CHECK: Output matches expected values.\n");
-	//}
-	//else {
-	//	printf("CHECK: Output does NOT match expected values.\n");
-	//}
+	if (checker(input, output, totalPixels)) {
+		printf("CHECK: Output matches expected values.\n");
+	}
+	else {
+		printf("CHECK: Output does NOT match expected values.\n");
+	}
+	 // end
 
 	// UNCOMMENT to print
 	// sanity check output
@@ -212,5 +214,5 @@ int main(int argc, char* argv[]) {
 
 	// conversion via user input
 	return convert();
-	//return 0;
+	return 0;
 }
