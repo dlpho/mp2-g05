@@ -7,8 +7,8 @@
 - HO, Denise Liana P.
 - PANGAN, Aaliyah Maxine Rochelle
 
-**Video Demo**
-![Video demo](https://drive.google.com/file/d/1Q6xun2aYbb8vReTx_Jl_n2Px4hyNGB3_/view?usp=sharing)
+**Video Demo:**
+[ LBYARCH S25H GRP9 MP2 DEMO](https://drive.google.com/file/d/1Q6xun2aYbb8vReTx_Jl_n2Px4hyNGB3_/view?usp=sharing)
 
 ## Project Overview
 
