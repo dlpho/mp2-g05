@@ -3,5 +3,5 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Project Path="mp2-g05.vcxproj" Id="25a7d7f4-c658-4803-8c87-1b2a826f0a5f" />
+  <Project Path="lbyarch-mp2-g09.vcxproj" Id="25a7d7f4-c658-4803-8c87-1b2a826f0a5f" />
 </Solution>

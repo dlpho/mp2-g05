@@ -47,7 +47,7 @@ Output:
 
 ### Steps
 
-1. Navigate to the project directory and open `mp2-g05.slnx` to open the Visual Studio project.
+1. Navigate to the project directory and open `lbyarch-mp2-g09.slnx` to open the Visual Studio project.
 
 2. Configure `asmfunc.asm` for the custom build tool:
    - Right-click `asmfunc.asm` > **Properties**
@@ -75,8 +75,8 @@ Output:
 
 Note: To run the benchmarking suite, uncomment `benchmarkSuite(30)` in `main.c` and comment out the `convert()` function call.
 
-### Accessing .exe File
-The compiled executable can be found in the `x64\Debug` folder of the project directory. The file is named `mp2-g05.exe`.
+### Accessing .exe Build
+The compiled executable can be found in the `x64\Debug` folder of the project directory. The file is named `lbyarch-mp2-g09.exe`.
 
 
 ## Testing and Benchmarking Methodology
