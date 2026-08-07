@@ -2,7 +2,7 @@
 
 ## Grayscale Image Conversion (Unsigned 8-bit Integer to Double Precision)
 
-**Group 05:**
+**Group 09:**
 
 - HO, Denise Liana P.
 - PANGAN, Aaliyah Maxine Rochelle

@@ -1,4 +1,4 @@
-; LBYARCH S25H - G05 (Ho, Pangan)
+; LBYARCH S25H - G09 (Ho, Pangan)
 
 ; assembly part using x86-64
 

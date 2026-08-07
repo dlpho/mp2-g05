@@ -1,4 +1,4 @@
-// LBYARCH S25H - G05 (Ho, Pangan)
+// LBYARCH S25H - G09 (Ho, Pangan)
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
@@ -214,5 +214,5 @@ int main(int argc, char* argv[]) {
 
 	// conversion via user input
 	return convert();
-	return 0;
+	//return 0;
 }
